@@ -1,35 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../../firebase.init';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
 import './Register.css';
 import SocialLogin from '../SocialLogin/SocialLogin';
 
 const Register = () => {
+    const [agree, setAgree] = useState(false);
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
 
     const navigate = useNavigate();
 
     const navigateLogin = event => {
         navigate('/login')
     }
-
     if (user) {
-        navigate('/home');
+        console.log(user);
     }
 
-    const handleRegister = event => {
+    const handleRegister = async (event) => {
         event.preventDefault();
         const name = event.target.name.value;
         const email = event.target.email.value;
         const password = event.target.password.value;
+        // const agree = event.target.terms.checked;
 
-        createUserWithEmailAndPassword(email, password)
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({ displayName: name });
+        console.log('Updated profile');
+        navigate('/home');
     }
 
     return (
@@ -39,7 +44,15 @@ const Register = () => {
                 <input type="text" name="name" id="" placeholder='Your Name' />
                 <input type="email" name="email" id="" placeholder='Your Email' required />
                 <input type="password" name="password" id="" placeholder='Password' required />
-                <input type="submit" value="Register" />
+                <input onChange={() => setAgree(!agree)} type="checkbox" name="terms" id="terms" />
+                {/* <label className={agree ? 'ms-3 text-primary' : 'ms-3 text-danger'} htmlFor="terms">Accept genius car Terms and Condition</label> */}
+                <label className={`ms-3 ${agree ? 'text-primary' : 'text-danger'}`} htmlFor="terms">Accept genius car Terms and Condition</label>
+                <input
+                    disabled={!agree}
+                    className='w-75 d-block mx-auto mt-3 bg-primary'
+                    type="submit"
+                    value="Register"
+                />
             </form>
             <p className='text-center my-3' > Already have an account? <Link className='text-danger text-decoration-none pe-auto' onClick={navigateLogin} to={'/login'}>Please Login</Link ></p>
             <SocialLogin></SocialLogin>
