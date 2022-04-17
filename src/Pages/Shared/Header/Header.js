@@ -2,12 +2,13 @@ import { signOut } from 'firebase/auth';
 import React from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { Link } from 'react-router-dom';
 import auth from '../../../firebase.init';
 import logo from '../../../images/logo-black.png'
 
 const Header = () => {
-    const { user } = useAuthState(auth);
+    const [user, loading, error] = useAuthState(auth);
     const handleSignOut = () => {
         signOut(auth);
     }
