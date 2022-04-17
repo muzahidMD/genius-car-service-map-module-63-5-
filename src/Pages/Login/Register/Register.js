@@ -21,13 +21,9 @@ const Register = () => {
     const navigateLogin = event => {
         navigate('/login')
     }
-    if (user) {
-        console.log(user);
-    }
     if (loading || updating) {
         return <Loading></Loading>
     }
-
 
     const handleRegister = async (event) => {
         event.preventDefault();
@@ -38,7 +34,6 @@ const Register = () => {
 
         await createUserWithEmailAndPassword(email, password);
         await updateProfile({ displayName: name });
-        console.log('Updated profile');
         navigate('/home');
     }
 
