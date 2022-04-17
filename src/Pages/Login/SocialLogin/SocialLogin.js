@@ -5,15 +5,20 @@ import './SocialLogin.css';
 import { useSignInWithGithub, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../Shared/Loading/Loading';
 
 const SocialLogin = () => {
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-    const [signInWithGithub, user1, loading1, error1] = useSignInWithGithub(auth);
+    const [signInWithGithub, user1, githubLoading, githubError] = useSignInWithGithub(auth);
     const navigate = useNavigate();
     let errorElement;
 
-    if (error || error1) {
-        errorElement = <p className='text-danger text-center'>Error: {error?.message} {error1?.message}</p>;
+    if (loading || githubLoading) {
+        return <Loading></Loading>
+    }
+
+    if (error || githubError) {
+        errorElement = <p className='text-danger text-center'>Error: {error?.message} {githubError?.message}</p>;
     }
     if (user || user1) {
         navigate('/home');
