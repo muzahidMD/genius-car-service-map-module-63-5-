@@ -22,7 +22,7 @@ const Register = () => {
         navigate('/login')
     }
     if (loading || updating) {
-        return <Loading></Loading>
+        return <Loading></Loading>;
     }
 
     const handleRegister = async (event) => {

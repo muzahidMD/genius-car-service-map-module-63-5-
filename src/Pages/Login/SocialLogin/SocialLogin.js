@@ -1,6 +1,6 @@
 import React from 'react';
 import googleLogo from "../../../images/Social/Google-logo.png";
-import facebookLogo from "../../../images/Social/facebook logo.png";
+import facebookLogo from "../../../images/Social/Google-logo.png";
 import './SocialLogin.css';
 import { useSignInWithGithub, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
